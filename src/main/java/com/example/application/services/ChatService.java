@@ -2,6 +2,7 @@ package com.example.application.services;
 
 import java.io.IOException;
 
+import com.example.application.context.ApplicationContextHolder;
 import com.example.application.entity.Person;
 import com.example.application.services.repos.PersonRepository;
 import com.example.application.services.transfer.Message;
@@ -22,12 +23,7 @@ public class ChatService {
 
 	//marked as: Not sure if this is right
 	////////////////////////////////////////////////////////////////////////
-	private final PersonService service;
-
-	public ChatService(PersonService service) {
-		this.service = service;
-	}
-
+	PersonService service = ApplicationContextHolder.getBean(PersonService.class);
 	///////////////////////////////////////////////////////////////////////
 
 
@@ -66,7 +62,7 @@ public class ChatService {
 		this.logger.info("Connected {}", resource.uuid());								//This logger never gets triggered
 		Person person = new Person();													//so onReady function gets invalid
 		person.setFirstName("this is a test entity");									//but how do I add a new Person to
-		service.update(person);															//the grid at the main page which is linked
+		service.update(person);													//the grid at the main page which is linked
 	}																					//to the PersonRepository
 																						//onReady normally gets triggered when connecting
 																						//to ws://localhost:8080/chat with websocket-client
