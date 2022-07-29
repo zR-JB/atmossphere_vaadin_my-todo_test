@@ -3,6 +3,7 @@ package com.example.application.services;
 import java.io.IOException;
 
 import com.example.application.entity.Person;
+import com.example.application.services.repos.PersonRepository;
 import com.example.application.services.transfer.Message;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.atmosphere.config.managed.Decoder;
@@ -21,7 +22,11 @@ public class ChatService {
 
 	//marked as: Not sure if this is right
 	////////////////////////////////////////////////////////////////////////
-	private PersonService service;
+	private final PersonService service;
+
+	public ChatService(PersonService service) {
+		this.service = service;
+	}
 
 	///////////////////////////////////////////////////////////////////////
 
@@ -56,16 +61,8 @@ public class ChatService {
 
 
 
-
-
-
-	//for testing purposes, add new Element to table when client connected.
-	///////////////////////////////////////////////////////////////////////////////
-	@Autowired
-	////////////////////////////////////////////////////////////////////////////////
 	@Ready
-	public void onReady(final AtmosphereResource resource, PersonService service) {		//I think the extra Parameter "PersonService service"
-		this.service = service;															//breaks the onReady-Atmosphere Event
+	public void onReady(final AtmosphereResource resource) {		//I think the extra Parameter "PersonService service" breaks the onReady-Atmosphere Event
 		this.logger.info("Connected {}", resource.uuid());								//This logger never gets triggered
 		Person person = new Person();													//so onReady function gets invalid
 		person.setFirstName("this is a test entity");									//but how do I add a new Person to
