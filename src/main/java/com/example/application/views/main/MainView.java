@@ -43,6 +43,13 @@ public class MainView extends HorizontalLayout {
         add(name, sayHello);
         Grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         add(Grid);
+        Button refreshButton = new Button("REFRESH");
+        refreshButton.addClickListener(event -> {
+           Grid.getDataProvider().refreshAll();
+            Grid.getLazyDataView().refreshAll();
+            System.out.println("REFRESHING!");
+        });
+        add(refreshButton);
 
 
 
