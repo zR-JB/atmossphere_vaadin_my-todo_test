@@ -9,6 +9,7 @@ import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import org.atmosphere.cpr.AtmosphereServlet;
 import org.atmosphere.cpr.ContainerInitializer;
+import org.atmosphere.cpr.MetaBroadcaster;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
@@ -42,13 +43,23 @@ public class Application extends SpringBootServletInitializer implements AppShel
     }
 
     @Bean
-    public ServletRegistrationBean<AtmosphereServlet> atmosphereServlet() {
+    public AtmosphereServlet atmosphereServlet(){
+        return new AtmosphereServlet();
+    }
+
+    @Bean
+    public MetaBroadcaster metaBroadcaster() {
+        return atmosphereServlet().framework().metaBroadcaster();
+    }
+
+    @Bean
+    public ServletRegistrationBean<AtmosphereServlet> atmosphereServletBean() {
         // Dispatcher servlet is mapped to '/home' to allow the AtmosphereServlet
         // to be mapped to '/chat'
-        final ServletRegistrationBean<AtmosphereServlet> registration = new ServletRegistrationBean<>(new AtmosphereServlet(), "/chat/*");
+        final ServletRegistrationBean<AtmosphereServlet> registration = new ServletRegistrationBean<>(atmosphereServlet(), "/chat/*");
         registration.addInitParameter("org.atmosphere.cpr.packages", "sample");
         registration.addInitParameter("org.atmosphere.interceptor.HeartbeatInterceptor"
-                                            + ".clientHeartbeatFrequencyInSeconds", "10");
+                + ".clientHeartbeatFrequencyInSeconds", "10");
         registration.setLoadOnStartup(0);
         // Need to occur before the EmbeddedAtmosphereInitializer
         registration.setOrder(Ordered.HIGHEST_PRECEDENCE);

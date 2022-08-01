@@ -21,9 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @ManagedService(path = "/chat")
 public class ChatService {
 
-	//marked as: Not sure if this is right
-	////////////////////////////////////////////////////////////////////////
-	PersonService service = ApplicationContextHolder.getBean(PersonService.class);
 	///////////////////////////////////////////////////////////////////////
 
 
@@ -60,9 +57,7 @@ public class ChatService {
 	@Ready
 	public void onReady(final AtmosphereResource resource) {		//I think the extra Parameter "PersonService service" breaks the onReady-Atmosphere Event
 		this.logger.info("Connected {}", resource.uuid());								//This logger never gets triggered
-		Person person = new Person();													//so onReady function gets invalid
-		person.setFirstName("this is a test entity");									//but how do I add a new Person to
-		service.update(person);													//the grid at the main page which is linked
+		//the grid at the main page which is linked
 	}																					//to the PersonRepository
 																						//onReady normally gets triggered when connecting
 																						//to ws://localhost:8080/chat with websocket-client
